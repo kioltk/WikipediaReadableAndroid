@@ -1,0 +1,26 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.agcy.wikiread.MainActivity">
+
+    <ImageView
+        android:src="@drawable/logo"
+        android:visibility="visible"
+        android:id="@+id/logo"
+        android:layout_centerInParent="true"
+        android:layout_width="300px"
+        android:layout_height="300px"
+        android:typeface="serif" />
+    <TextView
+        android:id="@+id/tip"
+        android:visibility="gone"
+        android:text="Click to continue"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
