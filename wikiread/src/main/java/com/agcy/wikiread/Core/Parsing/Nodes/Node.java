@@ -19,7 +19,8 @@ public class Node {
         return value;
     }
     public View getView(Context context){
-        if(!value.equals("")){
+
+        if(value!=null && !value.equals("")){
             TextView textView = new TextView(context);
             textView.setText(value);
             return textView;

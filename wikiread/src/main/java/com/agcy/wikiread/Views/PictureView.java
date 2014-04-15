@@ -7,23 +7,27 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.agcy.wikiread.Core.Helper;
 import com.agcy.wikiread.Models.Image;
+import com.agcy.wikiread.Models.Legend;
 import com.agcy.wikiread.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+
+import java.util.ArrayList;
 
 /**
  * Created by kiolt_000 on 03.03.14.
@@ -32,6 +36,8 @@ public class PictureView extends LinearLayout {
     public ImageView imageView;
     public TextView textView;
     private Image image;
+    private ArrayList<Legend> legend;
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public PictureView(Context context) {
@@ -54,16 +60,11 @@ public class PictureView extends LinearLayout {
         setLayoutParams(params);
 
         imageView = new ImageView(context);
-        textView = new TextView(context);
-
-        textView.setPadding(0,15,0,0);
-
         imageView.setAdjustViewBounds(true);
         imageView.setImageDrawable(r.getDrawable(R.drawable.logo));
         standartSettings();
 
         addView(imageView);
-        addView(textView);
     }
     public void setImageName(String name){
         image.title = name;
@@ -72,8 +73,26 @@ public class PictureView extends LinearLayout {
         return image.title;
     }
     public void setDescription(Spannable description){
+
+        textView = new TextView(getContext());
+
+        textView.setPadding(0,15,0,0);
+
+        addView(textView);
         textView.setText(description);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+    public void setLegend(ArrayList<Legend> legend){
+        if(!legend.isEmpty()) {
+            this.legend = legend;
+
+            Button button = new Button(getContext());
+            button.setText("show legend " + legend.size());
+            if (Helper.isTest()) {
+                addView(button);
+            }
+        }
+        //todo: legend?
     }
 
     public Image getImage() {
@@ -89,7 +108,7 @@ public class PictureView extends LinearLayout {
     }
 
     public void loaded(){
-        Log.i("wiki","downloading finished " + image.url);
+        //Log.i("wiki","downloading finished " + image.title +" url: " + image.url);
         imageView.clearAnimation();
         imageView.setOnClickListener(null);
         imageView.setPadding(0,0,0,0);
@@ -105,7 +124,7 @@ public class PictureView extends LinearLayout {
 
         imageView.startAnimation(blinking);
         imageView.setOnClickListener(null);
-        Log.i("wiki","downloading started " + image.url);
+        //Log.i("wiki","downloading started " + image.title +" url: " + image.url);
 
     }
     public void errored(){
@@ -115,11 +134,13 @@ public class PictureView extends LinearLayout {
         imageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"imhere",Toast.LENGTH_SHORT).show();
+                if(Helper.isTest())
+                    Toast.makeText(getContext(),"imhere",Toast.LENGTH_SHORT).show();
                 startLoading();
             }
         });
         imageView.setClickable(true);
+        //Log.e("wiki", "error with downloading " + image.title +" url: " + image.url);
     }
 
     public void startLoading() {

@@ -18,16 +18,17 @@ public class Page {
     public ImageUrlFetcher imageUrlFetcher;
 
 
+    @Attribute(required = false)
+    public int id;
 
     @Attribute(required = false)
     public int pageid;
-    @Attribute
+    @Attribute(required = false)
     public int ns;
-    @Attribute
+    @Attribute(required = false)
     public String title;
     @Attribute(required = false)
     public String missing;
-    // public Object touched;
     @ElementList(required = false)
     public List<Revision> revisions;
     @ElementList(required = false)

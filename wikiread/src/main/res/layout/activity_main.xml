@@ -17,8 +17,9 @@
         android:typeface="serif" />
     <TextView
         android:id="@+id/tip"
-        android:visibility="gone"
-        android:text="Click to continue"
+        android:visibility="visible"
+        android:gravity="center"
+        android:text="Hello!\nIt's test version of application.\nIt can crash or display incorrectly.\nHowever thank you for buying it.\nWe do our best to create something beautiful.\nClick to continue."
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/logo"
         android:layout_width="wrap_content"

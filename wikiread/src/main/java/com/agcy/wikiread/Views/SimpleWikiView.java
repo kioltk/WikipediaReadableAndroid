@@ -6,6 +6,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -21,6 +22,14 @@ public class SimpleWikiView extends TextView {
         setTextSize(TypedValue.COMPLEX_UNIT_DIP,10);
         setLineSpacing(10,1f);
     }
+
+    @Override
+    public View getRootView() {
+        //if(getText().equals(""))
+        //    return new View(getContext());
+        return super.getRootView();
+    }
+
     public void setText(Spannable spannable){
         URLSpan[] spans = spannable.getSpans(0, spannable.length(), URLSpan.class);
         for (URLSpan span: spans) {

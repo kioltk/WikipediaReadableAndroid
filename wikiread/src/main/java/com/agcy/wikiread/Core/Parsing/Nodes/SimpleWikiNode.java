@@ -5,6 +5,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.view.View;
 
+import com.agcy.wikiread.Core.Helper;
 import com.agcy.wikiread.Views.SimpleWikiView;
 
 /**
@@ -17,14 +18,23 @@ public class SimpleWikiNode extends Node{
     @Override
     public Spannable getValue(){
         //todo: tag handler!
+        if(isEmpty()){
+            if(Helper.isTest())
+                value = "#EMPTYNODE#";
+        }
         Spannable sp = (Spannable) Html.fromHtml(value, null, null);
         return (Spannable) Html.fromHtml(value);
     }
     @Override
     public View getView(Context context){
+        if(isEmpty()){
+            return new View(context);
+        }
         SimpleWikiView simpleWikiView = new SimpleWikiView(context);
         simpleWikiView.setText(getValue());
         return simpleWikiView;
     }
-
+    public Boolean isEmpty(){
+        return value==null || this.value.isEmpty();
+    }
 }

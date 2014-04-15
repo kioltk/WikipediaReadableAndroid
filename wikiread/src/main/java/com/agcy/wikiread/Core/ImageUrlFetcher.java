@@ -92,11 +92,15 @@ public abstract class ImageUrlFetcher extends AsyncTask<Void, Void, String> {
     public void parseImageResponse(Api response){
 
         for(Page page:response.query.pages){
-            Image image = page.imageinfo.get(0);
-            PictureView listener = listeners.get(page.title);
-            if(listener!=null){
-                listener.getImage().url = image.url;
-                listeners.remove(listener.getImageName());
+            try {
+                Image image = page.imageinfo.get(0);
+                PictureView listener = listeners.get(page.title);
+                if (listener != null) {
+                    listener.getImage().url = image.url;
+                    listeners.remove(listener.getImageName());
+                }
+            }catch (Exception exp){
+                Log.e("wiki","Exception", exp);
             }
         }
 

@@ -15,7 +15,9 @@ public class Query {
     @Element(required = false)
     public Normalized normalized;
 
-    @ElementList
+    @ElementList(required = false)
     public List<Page> pages;
 
+    @ElementList(required = false)
+    public List<Page> random;
 }

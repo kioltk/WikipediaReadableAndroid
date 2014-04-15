@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.agcy.wikiread.Core.Api.Api;
+import com.agcy.wikiread.Core.Api.SearchSuggestion;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,13 @@ import org.simpleframework.xml.core.Persister;
  */
 public abstract class Loader extends AsyncTask<String, Void, Object> {
 
+    public static final int PAGE = 0;
+    public static final int RANDOM = 0;
+    public static final int SEARCH = 1;
+    int loadingType;
+    public Loader(int loadingType){
+        this.loadingType = loadingType;
+    }
     @Override
     protected Object doInBackground(String... urls) {
         String responseStr = null;
@@ -39,21 +47,25 @@ public abstract class Loader extends AsyncTask<String, Void, Object> {
         }
         return responseStr;
     }
-    public abstract void onSuccess(Api response);
+    public abstract void onSuccess(Object response);
     public abstract void onError(Exception exp);
     public abstract void onFinish();
     protected void onPostExecute(Object result) {
         if(result!=null && result instanceof String){
-            Api api = null;
+            Object response = null;
             Serializer serializer = new Persister();
             try {
-               api = serializer.read(Api.class, (String) result);
+
+                Class<?> responseClass = Api.class;
+                if(loadingType==SEARCH)
+                    responseClass = SearchSuggestion.class;
+                response = serializer.read(responseClass, (String) result);
             } catch (Exception e) {
                 Log.e("wiki","Loader deserialization error");
                 e.printStackTrace();
             }
 
-            onSuccess(api);
+            onSuccess(response);
         }
         else{
             onError((Exception) result);

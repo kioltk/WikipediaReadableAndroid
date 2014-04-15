@@ -28,7 +28,7 @@ public abstract class LoaderFragment extends Fragment {
 
         rootView =  inflater.inflate(R.layout.fragment_loading, container, false);
         LinearLayout contentView = (LinearLayout) rootView.findViewById(R.id.container);
-        updateStatus("Loading",true);
+        updateStatus(status,true);
 
         return rootView;
     }
