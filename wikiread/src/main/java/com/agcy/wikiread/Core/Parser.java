@@ -28,7 +28,7 @@ public class Parser {
     // EXAMPLE: http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=xmlfm&titles=Albert%20Einstein
     // formating http://www.mediawiki.org/wiki/Help:Formatting
 
-    public static String lang="en";
+    static String lang;
     String content;
     Page page;
     public ArrayList<View> parsedViews;
@@ -36,12 +36,12 @@ public class Parser {
     Node currentNode;
     String nodeContent;
 
-    public Parser(Page page) {
+    public Parser(Page page, String lang) {
 
 
         this.page = page;
         this.content = "\n" + page.revisions.get(0).content;
-
+        Parser.lang = lang;
         parsedNodes = new ArrayList<Node>();
         parsedViews = new ArrayList<View>();
         currentNode = null;
@@ -641,14 +641,20 @@ public class Parser {
     }
 
     public static String parseUrl(String url) {
-
-        int langIndex = url.indexOf(".wikipedia.org");
-        String lang = url.substring(7, langIndex);
-        int titleIndex = url.indexOf("/wiki/") + 5;
-        String pageTitle = url.substring(titleIndex + 1);
+        if(url.contains("wikipedia.org/w/api"))
+            return url;
+        String lang = parseLangFromUrl(url);
+        String pageTitle = parseTitleFromUrl(url);
         return getApiUrl(pageTitle, lang);
     }
-
+    public static String parseLangFromUrl(String url){
+        int langIndex = url.indexOf(".wikipedia.org");
+        return url.substring(7, langIndex);
+    }
+    public static String parseTitleFromUrl(String url){
+        int titleIndex = url.indexOf("/wiki/") + 5;
+        return url.substring(titleIndex + 1);
+    }
     public static String getApiUrl(String title, String lang) {
 
         String url = "http://" + lang + apiUrl + title;
@@ -656,9 +662,9 @@ public class Parser {
         return url;
     }
 
-    public static String getSearchUrl(String searchQuery) {
+    public static String getSearchUrl(String searchQuery, String lang) {
         String string = "http://" +
-                "en" +
+                lang +
                 ".wikipedia.org/w/api.php?action=opensearch&limit=30&namespace=0&format=xml" +
                 "&search=" + searchQuery;
         return string;

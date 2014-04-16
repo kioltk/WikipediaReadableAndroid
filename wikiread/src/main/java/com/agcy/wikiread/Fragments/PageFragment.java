@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.agcy.wikiread.Core.ImageUrlFetcher;
 import com.agcy.wikiread.Core.Parser;
+import com.agcy.wikiread.Models.LangLink;
 import com.agcy.wikiread.Models.Page;
 import com.agcy.wikiread.R;
+import com.agcy.wikiread.Views.LangSwitcherView;
 import com.agcy.wikiread.Views.PictureView;
 
 import java.util.ArrayList;
@@ -32,12 +35,12 @@ public class PageFragment extends Fragment {
 
     }
 
-    public PageFragment(Page page, Context context) {
+    public PageFragment(Page page, Context context, String lang) {
 
         this.page = page;
         this.context = context;
-
-        parser = new Parser(page);
+        this.lang = lang;
+        parser = new Parser(page, lang);
     }
 
     @Override
@@ -63,7 +66,6 @@ public class PageFragment extends Fragment {
 
         final ArrayList<PictureView> seekers = diveAndFindSeekers(parser.parsedViews);
 
-
         imageUrlFetcher = new ImageUrlFetcher(seekers) {
 
             @Override
@@ -71,6 +73,7 @@ public class PageFragment extends Fragment {
                 downloadImages(seekers);
             }
         };
+
         imageUrlFetcher.execute();
 
 
@@ -83,7 +86,7 @@ public class PageFragment extends Fragment {
     }
 
     public ArrayList<PictureView> diveAndFindSeekers(ArrayList<View> views) {
-        // COME ON MAZAFAKERS!!1
+
         ArrayList<PictureView> seekers = new ArrayList<PictureView>();
         for (View view : views) {
 
@@ -102,5 +105,10 @@ public class PageFragment extends Fragment {
 
         }
         return seekers;
+    }
+
+    public LangSwitcherView parseLangs() {
+        LangSwitcherView listView = new LangSwitcherView(context, page.langlinks, lang);
+        return listView;
     }
 }

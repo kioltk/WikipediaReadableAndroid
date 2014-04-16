@@ -41,5 +41,4 @@ public class Page {
     @ElementList(required = false)
     public List<Image> imageinfo;
 
-
 }

@@ -30,8 +30,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="http" />
-                <data android:host="en.wikipedia.org" />
-                <!-- todo: langs! *.wikipedia.org -->
+                <data android:host="*.wikipedia.org" />
             </intent-filter>
         </activity>
         <activity

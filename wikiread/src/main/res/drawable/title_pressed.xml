@@ -14,12 +14,5 @@
                 android:width="2dp"/>
         </shape>
     </item>
-    <item
 
-        android:right="15dp"
-        android:top="9dp"
-        android:bottom="9dp"
-        >
-        <bitmap android:src="@drawable/arrow" android:gravity="right"/>
-    </item>
 </layer-list>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="language_codes">
+        <item>en</item>
+        <item>ru</item>
+        <item>es</item>
+        <item>pl</item>
+        <item>it</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>ja</item>
+        <item>ko</item>
+    </array>
+    <array name="language_names">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Español</item>
+        <item>Polski</item>
+        <item>Italiano</item>
+        <item>Français</item>
+        <item>Deutch</item>
+        <item>日本語</item>
+        <item>한국어</item>
+    </array>
+
+    <array name="language_flag">
+        <item>@drawable/en</item>
+        <item>@drawable/ru</item>
+        <item>@drawable/es</item>
+        <item>@drawable/pl</item>
+        <item>@drawable/it</item>
+        <item>@drawable/fr</item>
+        <item>@drawable/de</item>
+        <item>@drawable/ja</item>
+        <item>@drawable/ko</item>
+    </array>
+    <!-- unparsed
+    <ll lang="ace" xml:space="preserve">Albert Einstein</ll>
+<ll lang="af" xml:space="preserve">Albert Einstein</ll>
+<ll lang="als" xml:space="preserve">Albert Einstein</ll>
+<ll lang="am" xml:space="preserve">አልበርት አይንስታይን</ll>
+<ll lang="an" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ang" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ar" xml:space="preserve">ألبرت أينشتاين</ll>
+<ll lang="arz" xml:space="preserve">البرت اينشتاين</ll>
+<ll lang="as" xml:space="preserve">এলবাৰ্ট আইনষ্টাইন</ll>
+<ll lang="ast" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ay" xml:space="preserve">Albert Einstein</ll>
+<ll lang="az" xml:space="preserve">Albert Eynşteyn</ll>
+<ll lang="ba" xml:space="preserve">Альберт Эйнштейн</ll>
+<ll lang="bat-smg" xml:space="preserve">Alberts Einšteins</ll>
+<ll lang="bcl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="be" xml:space="preserve">Альберт Эйнштэйн</ll>
+<ll lang="be-x-old" xml:space="preserve">Альбэрт Айнштайн</ll>
+<ll lang="bg" xml:space="preserve">Алберт Айнщайн</ll>
+<ll lang="bm" xml:space="preserve">Albert Einstein</ll>
+<ll lang="bn" xml:space="preserve">আলবার্ট আইনস্টাইন</ll>
+<ll lang="bpy" xml:space="preserve">আলবার্ট আইনস্টাইন</ll>
+<ll lang="br" xml:space="preserve">Albert Einstein</ll>
+<ll lang="bs" xml:space="preserve">Albert Einstein</ll>
+<ll lang="bxr" xml:space="preserve">Альберт Айнштайн</ll>
+<ll lang="ca" xml:space="preserve">Albert Einstein</ll>
+<ll lang="cbk-zam" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ce" xml:space="preserve">Эйнштейн, Альберт</ll>
+<ll lang="ckb" xml:space="preserve">ئەلبەرت ئاینشتاین</ll>
+<ll lang="co" xml:space="preserve">Albert Einstein</ll>
+<ll lang="cs" xml:space="preserve">Albert Einstein</ll>
+<ll lang="cv" xml:space="preserve">Эйнштейн Альберт</ll>
+<ll lang="cy" xml:space="preserve">Albert Einstein</ll>
+<ll lang="da" xml:space="preserve">Albert Einstein</ll>
+<ll lang="de" xml:space="preserve">Albert Einstein</ll>
+<ll lang="diq" xml:space="preserve">Albert Einstein</ll>
+<ll lang="el" xml:space="preserve">Άλμπερτ Αϊνστάιν</ll>
+<ll lang="eo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="es" xml:space="preserve">Albert Einstein</ll>
+<ll lang="et" xml:space="preserve">Albert Einstein</ll>
+<ll lang="eu" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ext" xml:space="preserve">Albert Einstein</ll>
+<ll lang="fa" xml:space="preserve">آلبرت اینشتین</ll>
+<ll lang="fi" xml:space="preserve">Albert Einstein</ll>
+<ll lang="fiu-vro" xml:space="preserve">Einsteini Albert</ll>
+<ll lang="fo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="fr" xml:space="preserve">Albert Einstein</ll>
+<ll lang="frp" xml:space="preserve">Albert Einstein</ll>
+<ll lang="fy" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ga" xml:space="preserve">Albert Einstein</ll>
+<ll lang="gan" xml:space="preserve">愛因斯坦</ll>
+<ll lang="gd" xml:space="preserve">Albert Einstein</ll>
+<ll lang="gl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="gn" xml:space="preserve">Albert Einstein</ll>
+<ll lang="gu" xml:space="preserve">આલ્બર્ટ આઇન્સ્ટાઇન</ll>
+<ll lang="gv" xml:space="preserve">Albert Einstein</ll>
+<ll lang="hak" xml:space="preserve">Albert Einstein</ll>
+<ll lang="haw" xml:space="preserve">Albert Einstein</ll>
+<ll lang="he" xml:space="preserve">אלברט איינשטיין</ll>
+<ll lang="hi" xml:space="preserve">अल्बर्ट आइंस्टीन</ll>
+<ll lang="hif" xml:space="preserve">Albert Einstein</ll>
+<ll lang="hr" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ht" xml:space="preserve">Albert Einstein</ll>
+<ll lang="hu" xml:space="preserve">Albert Einstein</ll>
+<ll lang="hy" xml:space="preserve">Ալբերտ Այնշտայն</ll>
+<ll lang="ia" xml:space="preserve">Albert Einstein</ll>
+<ll lang="id" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ie" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ig" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ilo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="io" xml:space="preserve">Albert Einstein</ll>
+<ll lang="is" xml:space="preserve">Albert Einstein</ll>
+<ll lang="it" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ja" xml:space="preserve">アルベルト・アインシュタイン</ll>
+<ll lang="jbo" xml:space="preserve">albert. ainctain</ll>
+<ll lang="jv" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ka" xml:space="preserve">ალბერტ აინშტაინი</ll>
+<ll lang="kaa" xml:space="preserve">Albert Einstein</ll>
+<ll lang="kab" xml:space="preserve">Albert Einstein</ll>
+<ll lang="kk" xml:space="preserve">Альберт Эйнштейн</ll>
+<ll lang="km" xml:space="preserve">អាល់បឺត អែងស្តែង</ll>
+<ll lang="kn" xml:space="preserve">ಅಲ್ಬರ್ಟ್ ಐನ್‍ಸ್ಟೈನ್</ll>
+<ll lang="ko" xml:space="preserve">알베르트 아인슈타인</ll>
+<ll lang="ksh" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ku" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ky" xml:space="preserve">Эйнштейн, Алберт</ll>
+<ll lang="la" xml:space="preserve">Albertus Einstein</ll>
+<ll lang="lad" xml:space="preserve">Albert Einstein</ll>
+<ll lang="lb" xml:space="preserve">Albert Einstein</ll>
+<ll lang="lez" xml:space="preserve">Альберт Эйнштейн</ll>
+<ll lang="lij" xml:space="preserve">Albert Einstein</ll>
+<ll lang="lmo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="lt" xml:space="preserve">Albert Einstein</ll>
+<ll lang="lv" xml:space="preserve">Alberts Einšteins</ll>
+<ll lang="map-bms" xml:space="preserve">Albert Einstein</ll>
+<ll lang="mg" xml:space="preserve">Albert Einstein</ll>
+<ll lang="mk" xml:space="preserve">Алберт Ајнштајн</ll>
+<ll lang="ml" xml:space="preserve">ആൽബർട്ട് ഐൻസ്റ്റൈൻ</ll>
+<ll lang="mn" xml:space="preserve">Альберт Эйнштейн</ll>
+<ll lang="mr" xml:space="preserve">अॅल्बर्ट आइन्स्टाइन</ll>
+<ll lang="ms" xml:space="preserve">Albert Einstein</ll>
+<ll lang="mwl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="my" xml:space="preserve">အဲလ်ဘတ် အိုင်းစတိုင်း</ll>
+<ll lang="mzn" xml:space="preserve">آلبرت اینشتین</ll>
+<ll lang="nah" xml:space="preserve">Albert Einstein</ll>
+<ll lang="nds" xml:space="preserve">Albert Einstein</ll>
+<ll lang="nds-nl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ne" xml:space="preserve">अल्बर्ट आइन्स्टाइन</ll>
+<ll lang="nl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="nn" xml:space="preserve">Albert Einstein</ll>
+<ll lang="no" xml:space="preserve">Albert Einstein</ll>
+<ll lang="nov" xml:space="preserve">Albert Einstein</ll>
+<ll lang="nv" xml:space="preserve">Hastiin Albert Einstein</ll>
+<ll lang="oc" xml:space="preserve">Albert Einstein</ll>
+<ll lang="or" xml:space="preserve">ଆଲବର୍ଟ ଆଇନଷ୍ଟାଇନ</ll>
+<ll lang="os" xml:space="preserve">Эйнштейн, Альберт</ll>
+<ll lang="pa" xml:space="preserve">ਅਲਬਰਟ ਆਈਨਸਟਾਈਨ</ll>
+<ll lang="pag" xml:space="preserve">Albert Einstein</ll>
+<ll lang="pam" xml:space="preserve">Albert Einstein</ll>
+<ll lang="pcd" xml:space="preserve">Albert Einstein</ll>
+<ll lang="pl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="pms" xml:space="preserve">Albert Einstein</ll>
+<ll lang="pnb" xml:space="preserve">ایلبرٹ آئینسٹائن</ll>
+<ll lang="ps" xml:space="preserve">آلبرټ آينشټاين</ll>
+<ll lang="pt" xml:space="preserve">Albert Einstein</ll>
+<ll lang="qu" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ro" xml:space="preserve">Albert Einstein</ll>
+<ll lang="rue" xml:space="preserve">Алберт Айнштайн</ll>
+<ll lang="sa" xml:space="preserve">अल्बर्ट ऐन्स्टायिन्</ll>
+<ll lang="sah" xml:space="preserve">Альберт Эйнштейн</ll>
+<ll lang="sc" xml:space="preserve">Albert Einstein</ll>
+<ll lang="scn" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sco" xml:space="preserve">Albert Einstein</ll>
+<ll lang="se" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sh" xml:space="preserve">Albert Einstein</ll>
+<ll lang="si" xml:space="preserve">ඇල්බට්‍ අයින්ස්ටයින්</ll>
+<ll lang="simple" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sk" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="so" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sq" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sr" xml:space="preserve">Алберт Ајнштајн</ll>
+<ll lang="su" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sv" xml:space="preserve">Albert Einstein</ll>
+<ll lang="sw" xml:space="preserve">Albert Einstein</ll>
+<ll lang="szl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="ta" xml:space="preserve">ஆல்பர்ட் ஐன்ஸ்டைன்</ll>
+<ll lang="te" xml:space="preserve">ఆల్బర్ట్ ఐన్‌స్టీన్</ll>
+<ll lang="th" xml:space="preserve">อัลเบิร์ต ไอน์สไตน์</ll>
+<ll lang="tk" xml:space="preserve">Albert Eýnşteýn</ll>
+<ll lang="tl" xml:space="preserve">Albert Einstein</ll>
+<ll lang="tpi" xml:space="preserve">Albert Einstein</ll>
+<ll lang="tr" xml:space="preserve">Albert Einstein</ll>
+<ll lang="tt" xml:space="preserve">Альберт Эйнштейн</ll>
+<ll lang="tyv" xml:space="preserve">Эйнштейн, Альберт</ll>
+<ll lang="ug" xml:space="preserve">ئالبېرىت ئېينىشتېين</ll>
+<ll lang="uk" xml:space="preserve">Альберт Ейнштейн</ll>
+<ll lang="ur" xml:space="preserve">البرٹ آئنسٹائن</ll>
+<ll lang="uz" xml:space="preserve">Albert Einstein</ll>
+<ll lang="vec" xml:space="preserve">Albert Einstein</ll>
+<ll lang="vep" xml:space="preserve">Einštein Al'bert</ll>
+<ll lang="vi" xml:space="preserve">Albert Einstein</ll>
+<ll lang="vo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="wa" xml:space="preserve">Albert Einstein</ll>
+<ll lang="war" xml:space="preserve">Albert Einstein</ll>
+<ll lang="wo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="xmf" xml:space="preserve">ალბერტ აინშტაინი</ll>
+<ll lang="yi" xml:space="preserve">אלבערט איינשטיין</ll>
+<ll lang="yo" xml:space="preserve">Albert Einstein</ll>
+<ll lang="za" xml:space="preserve">Albert Einstein</ll>
+<ll lang="zea" xml:space="preserve">Albert Einstein</ll>
+<ll lang="zh" xml:space="preserve">阿尔伯特·爱因斯坦</ll>
+<ll lang="zh-min-nan" xml:space="preserve">Albert Einstein</ll>
+<ll lang="zh-yue" xml:space="preserve">愛因斯坦</ll>
+    -->
+</resources>

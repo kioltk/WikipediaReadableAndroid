@@ -11,6 +11,6 @@ public class Helper {
         Helper.app = app;
     }
     public static Boolean isTest(){
-       return true;
+       return false;
     }
 }

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,11 @@ import com.agcy.wikiread.Core.Parser;
 import com.agcy.wikiread.Fragments.LoaderFragment;
 import com.agcy.wikiread.Fragments.PageFragment;
 import com.agcy.wikiread.Fragments.SearchFragment;
+import com.agcy.wikiread.Models.LangLink;
 import com.agcy.wikiread.Models.Page;
+import com.agcy.wikiread.Views.Drawer;
+import com.agcy.wikiread.Views.DrawerMainMenu;
+import com.agcy.wikiread.Views.LangSwitcherView;
 
 import java.util.ArrayList;
 
@@ -33,14 +38,21 @@ public class PageActivity extends Activity {
     Fragment currentFragment;
     Fragment tempFragment;
     Context context;
-
+    Drawer drawer;
+    LangSwitcherView langSwitcherView;
+    View drawerMenu;
+    String lang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
 
+
         setContentView(R.layout.activity_page);
+        this.context = this;
+
+        drawer = (Drawer) findViewById(R.id.drawer);
 
         EditText search = (EditText) findViewById(R.id.search);
 
@@ -60,23 +72,23 @@ public class PageActivity extends Activity {
 
         Intent intent = getIntent();
         Uri uri = intent.getData();
-        String url;
-        if (uri != null) {
-            url = Parser.parseUrl(uri.toString());
-        } else {
 
-            url = Parser.parseUrl("http://en.wikipedia.org/wiki/Pavel");
-        }
+        String url = uri.toString();
+        lang = Parser.parseLangFromUrl(url);
+        if(uri!=null)
 
-        //else//Эйнштейн,%20Альберт");
-
-
-        setContent(url);
+            setContent(Parser.parseUrl(url));
+        else
+            setContent(Parser.parseTitleFromUrl(url),Parser.parseLangFromUrl(url));
 
 
     }
 
-    public void setContent(String url) {
+    public void setContent(String title, String lang) {
+        setContent(Parser.getApiUrl(title,lang));
+    }
+    public void setContent(String url){
+
         this.context = this;
         tempFragment = new LoaderFragment("Loading") {
             @Override
@@ -115,6 +127,7 @@ public class PageActivity extends Activity {
         task.execute(url);
     }
 
+
     public void onPageLoaded(final Api response) {
 
         new AsyncTask<Object, Void, Boolean>() {
@@ -122,10 +135,19 @@ public class PageActivity extends Activity {
             protected Boolean doInBackground(Object... params) {
                 try {
                     page = Parser.getPage(response);
-                    tempFragment = new PageFragment(page, context);
+                    tempFragment = new PageFragment(page, context, lang);
+                    langSwitcherView = ((PageFragment)tempFragment).parseLangs();
+                    langSwitcherView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            LangLink langLink = (LangLink) parent.getItemAtPosition(position);
+                            languageChanged(langLink.lang, langLink.title);
+                        }
+                    });
                     ((PageFragment) tempFragment).parseViews();
                     //todo: async parse
                     ((PageFragment) tempFragment).fetchImagesUrls();
+
                 } catch (Exception exp) {
                     return false;
                 }
@@ -155,9 +177,12 @@ public class PageActivity extends Activity {
                     .commit();
     }
 
-    public void changeLanguage(View view) {
-        if (Helper.isTest())
-            Toast.makeText(this, "Be patience, we will add another languages support soon.", Toast.LENGTH_SHORT).show();
+    public void onGlobeClick(View view) {
+            if(langSwitcherView!=null) {
+                drawer.setContent(langSwitcherView);
+                drawer.setSide(Drawer.SIDE_RIGHT);
+                drawer.open();
+            }
         /*
             todo: change languages
             LangLink langLink = page.langlinks.get(1);
@@ -165,18 +190,29 @@ public class PageActivity extends Activity {
             setContent(url);
         */
     }
+    public void languageChanged(String lang, String title){
+        setContent(title, lang);
+        drawer.close();
+    }
 
-    public void settings(View view) {
-        //todo: show settings?
-        //if(!Helper.isTest())
-        Toast.makeText(this, "Be patience, we will add a lot of settings soon.", Toast.LENGTH_SHORT).show();
+    public void onDrawerClick(View view) {
+            drawerMenu = new DrawerMainMenu(context);
+            drawer.setContent(drawerMenu);
+            drawer.setSide(Drawer.SIDE_LEFT);
+            drawer.open();
         Intent intent = new Intent(context, SettingsActivity.class);
         //startActivity(intent);
     }
 
-    public void search(String searchRequest) {
 
-        String url = Parser.getSearchUrl(searchRequest);
+
+    public void search(final String searchRequest) {
+
+        String url = Parser.getSearchUrl(searchRequest, lang);
+
+        langSwitcherView = null;
+
+
 
         this.context = this;
         tempFragment = new LoaderFragment("Searching") {
@@ -198,6 +234,16 @@ public class PageActivity extends Activity {
             public void onSuccess(Object response) {
                 ArrayList<SearchItem> items = new ArrayList<SearchItem>(((SearchSuggestion) response).searchItemList);
                 tempFragment = new SearchFragment(items, context);
+
+                langSwitcherView = new LangSwitcherView(context);
+                langSwitcherView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        lang = ((LangLink) parent.getItemAtPosition(position)).lang;
+                        search(searchRequest);
+                    }
+                });
                 ((LoaderFragment) currentFragment).onLoaded(true);
             }
 

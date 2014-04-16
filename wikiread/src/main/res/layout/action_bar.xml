@@ -8,10 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <ImageButton
-        android:focusableInTouchMode="false"
-        android:focusable="false"
-        android:clickable="false"
-        android:src="@drawable/logo"
+
+        android:onClick="onDrawerClick"
+        android:src="@drawable/ic_drawer"
         android:background="@drawable/navigation_button"
         android:id="@+id/settings"
         android:padding="15dp"
@@ -39,10 +38,13 @@
         android:inputType="text" />
 
     <ImageButton
-        android:onClick="settings"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:onClick="onGlobeClick"
         android:background="@drawable/navigation_button"
         android:id="@+id/language"
-        android:src="@drawable/ic_drawer"
+        android:src="@drawable/globe"
         android:scaleType="centerInside"
         android:padding="30dp"
         android:layout_width="90dp"

@@ -13,4 +13,7 @@ public class LangLink {
     public String space;
     @Text
     public String title;
+
+
+
 }

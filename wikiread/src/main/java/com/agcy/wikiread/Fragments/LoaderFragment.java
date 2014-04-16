@@ -76,6 +76,8 @@ public abstract class LoaderFragment extends Fragment {
             });
             rootView.clearAnimation();
             rootView.startAnimation(fadeOut);
+        }else{
+            updateStatus("Error has occurred",false);
         }
     }
     public abstract void onFinish();
