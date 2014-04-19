@@ -13,14 +13,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.agcy.wikiread.Core.Api.Api;
 import com.agcy.wikiread.Core.Api.SearchItem;
 import com.agcy.wikiread.Core.Api.SearchSuggestion;
 import com.agcy.wikiread.Core.Helper;
 import com.agcy.wikiread.Core.Loader;
-import com.agcy.wikiread.Core.Parser;
+import com.agcy.wikiread.Core.Pager;
+import com.agcy.wikiread.Core.Parsing.Url;
 import com.agcy.wikiread.Fragments.LoaderFragment;
 import com.agcy.wikiread.Fragments.PageFragment;
 import com.agcy.wikiread.Fragments.SearchFragment;
@@ -42,6 +42,7 @@ public class PageActivity extends Activity {
     LangSwitcherView langSwitcherView;
     View drawerMenu;
     String lang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -74,20 +75,17 @@ public class PageActivity extends Activity {
         Uri uri = intent.getData();
 
         String url = uri.toString();
-        lang = Parser.parseLangFromUrl(url);
-        if(uri!=null)
-
-            setContent(Parser.parseUrl(url));
-        else
-            setContent(Parser.parseTitleFromUrl(url),Parser.parseLangFromUrl(url));
+        this.lang = Url.parseLangFromUrl(url);
+        setContent(Url.parseUrl(url));
 
 
     }
 
     public void setContent(String title, String lang) {
-        setContent(Parser.getApiUrl(title,lang));
+        this.lang = lang;
+        setContent(Url.getApiUrl(title, lang));
     }
-    public void setContent(String url){
+    public void setContent(final String url){
 
         this.context = this;
         tempFragment = new LoaderFragment("Loading") {
@@ -98,7 +96,10 @@ public class PageActivity extends Activity {
 
             @Override
             public void onError(Exception exp) {
-                updateStatus(exp.getLocalizedMessage(), false);
+                if(Helper.isTest())
+                    updateStatus(exp.getLocalizedMessage()+ "\n "+url, false);
+                else
+                    updateStatus("Error has occurred", false);
             }
         };
         replaceFragment();
@@ -130,11 +131,11 @@ public class PageActivity extends Activity {
 
     public void onPageLoaded(final Api response) {
 
-        new AsyncTask<Object, Void, Boolean>() {
+        new AsyncTask<Object, Void, Exception>() {
             @Override
-            protected Boolean doInBackground(Object... params) {
+            protected Exception doInBackground(Object... params) {
                 try {
-                    page = Parser.getPage(response);
+                    page = Pager.getPage(response);
                     tempFragment = new PageFragment(page, context, lang);
                     langSwitcherView = ((PageFragment)tempFragment).parseLangs();
                     langSwitcherView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -142,6 +143,7 @@ public class PageActivity extends Activity {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             LangLink langLink = (LangLink) parent.getItemAtPosition(position);
                             languageChanged(langLink.lang, langLink.title);
+                            drawer.close();
                         }
                     });
                     ((PageFragment) tempFragment).parseViews();
@@ -149,18 +151,18 @@ public class PageActivity extends Activity {
                     ((PageFragment) tempFragment).fetchImagesUrls();
 
                 } catch (Exception exp) {
-                    return false;
+                    return exp;
                 }
-                return true;
+                return null;
             }
 
             @Override
-            protected void onPostExecute(Boolean success) {
-                try {
-                    ((LoaderFragment) currentFragment).onLoaded(success);
-                } catch (Exception exp) {
-                    ((LoaderFragment) currentFragment).onError(exp);
-                }
+            protected void onPostExecute(Exception exception) {
+                if(exception==null)
+                    ((LoaderFragment) currentFragment).onLoaded(true);
+                else
+                    ((LoaderFragment) currentFragment).onError(exception);
+
             }
         }.execute();
 
@@ -186,11 +188,12 @@ public class PageActivity extends Activity {
         /*
             todo: change languages
             LangLink langLink = page.langlinks.get(1);
-            String url = Parser.parseUrl(langLink.title, langLink.lang);
+            String url = Pager.parseUrl(langLink.title, langLink.lang);
             setContent(url);
         */
     }
     public void languageChanged(String lang, String title){
+        this.lang = lang;
         setContent(title, lang);
         drawer.close();
     }
@@ -208,7 +211,7 @@ public class PageActivity extends Activity {
 
     public void search(final String searchRequest) {
 
-        String url = Parser.getSearchUrl(searchRequest, lang);
+        String url = Url.getSearchUrl(searchRequest, lang);
 
         langSwitcherView = null;
 

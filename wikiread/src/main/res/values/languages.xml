@@ -10,6 +10,7 @@
         <item>de</item>
         <item>ja</item>
         <item>ko</item>
+        <item>uk</item>
     </array>
     <array name="language_names">
         <item>English</item>
@@ -21,6 +22,7 @@
         <item>Deutch</item>
         <item>日本語</item>
         <item>한국어</item>
+        <item>Українська</item>
     </array>
 
     <array name="language_flag">
@@ -33,6 +35,7 @@
         <item>@drawable/de</item>
         <item>@drawable/ja</item>
         <item>@drawable/ko</item>
+        <item>@drawable/uk</item>
     </array>
     <!-- unparsed
     <ll lang="ace" xml:space="preserve">Albert Einstein</ll>

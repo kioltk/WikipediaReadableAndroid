@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 public class SearchFragment extends Fragment {
     private final Context context;
     private ArrayList<SearchItem> items;
-    private ListView rootView;
 
     public SearchFragment(ArrayList<SearchItem> items, Context context) {
         this.items = items;
@@ -35,93 +35,59 @@ public class SearchFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        View rootView =  inflater.inflate(R.layout.fragment_search, container, false);
 
-        rootView = (ListView) inflater.inflate(R.layout.fragment_search, container, false);
-
-        rootView.setAdapter(new ListAdapter() {
-
-            @Override
-            public boolean areAllItemsEnabled() {
-                return true;
-            }
-
-            @Override
-            public boolean isEnabled(int position) {
-                return true;
-            }
-
-            @Override
-            public void registerDataSetObserver(DataSetObserver observer) {
-
-            }
-
-            @Override
-            public void unregisterDataSetObserver(DataSetObserver observer) {
-
-            }
-
-            @Override
-            public int getCount() {
-                return items.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return items.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public boolean hasStableIds() {
-                return false;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View itemView = inflater.inflate(R.layout.search_item, parent, false);
-
-                TextView titleView = (TextView) itemView.findViewById(R.id.title);
-                TextView descriptionView = (TextView) itemView.findViewById(R.id.description);
-
-                SearchItem item = (SearchItem) getItem(position);
-                if (item.image != null) {
-                    //todo: image?
+        if(items.size()!=0) {
+            ListView list = (ListView) rootView.findViewById(R.id.list);
+            list.setAdapter(new BaseAdapter() {
+                @Override
+                public int getCount() {
+                    return items.size();
                 }
-                titleView.setText(String.valueOf(item.title.content));
-                if (item.description.content != null)
-                    descriptionView.setText(String.valueOf(item.description.content));
-                else
-                    descriptionView.setVisibility(View.GONE);
-                return itemView;
-            }
 
-            @Override
-            public int getItemViewType(int position) {
-                return 0;
-            }
+                @Override
+                public Object getItem(int position) {
+                    return items.get(position);
+                }
 
-            @Override
-            public int getViewTypeCount() {
-                return 2;
-            }
+                @Override
+                public long getItemId(int position) {
+                    return 0;
+                }
 
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-        });
-        rootView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(context, PageActivity.class);
-                intent.setData(Uri.parse(items.get(0).url.content));
-                startActivity(intent);
-            }
-        });
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View itemView = inflater.inflate(R.layout.search_item, parent, false);
+
+                    TextView titleView = (TextView) itemView.findViewById(R.id.title);
+                    TextView descriptionView = (TextView) itemView.findViewById(R.id.description);
+
+                    SearchItem item = (SearchItem) getItem(position);
+                    if (item.image != null) {
+                        //todo: image?
+                    }
+                    titleView.setText(String.valueOf(item.title.content));
+                    if (item.description.content != null)
+                        descriptionView.setText(String.valueOf(item.description.content));
+                    else
+                        descriptionView.setVisibility(View.GONE);
+                    return itemView;
+                }
+
+            });
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(context, PageActivity.class);
+                    SearchItem item = items.get(position);
+                    intent.setData(Uri.parse(item.url.content));
+                    startActivity(intent);
+                }
+            });
+        } else{
+            TextView text = (TextView) rootView.findViewById(R.id.text);
+            text.setText("Sorry, we didn't find anything");
+        }
         return rootView;
     }
 

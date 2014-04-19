@@ -20,24 +20,23 @@ public class WikiTagHandler implements Html.TagHandler {
     }
 
     private void processProof(boolean opening, Editable output) {
-        int len = output.length();
+        int currentIndex = output.length();
         if(opening) {
-            output.setSpan(new ProofSpan(), len, len, Spannable.SPAN_MARK_MARK);
+            output.setSpan(new ProofSpan(), currentIndex, currentIndex, Spannable.SPAN_MARK_MARK);
         } else {
             Object obj = getLast(output, ProofSpan.class);
-            int where = output.getSpanStart(obj);
+            int spanStart = output.getSpanStart(obj);
 
             output.removeSpan(obj);
             if(Helper.isTest()) {
-
-                output.replace(where, len, "#PROOF#");
-                len = where + 6;
+                output.replace(spanStart, currentIndex, "#PROOF#");
+                currentIndex = spanStart + 6;
             }else {
-                output.replace(where, len, " ");
-                len = where+1;
+                output.replace(spanStart, currentIndex, "");
+                currentIndex = spanStart;
             }
-            if (where != len) {
-                output.setSpan(new ProofSpan(), where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (spanStart != currentIndex) {
+                output.setSpan(new ProofSpan(), spanStart, currentIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }

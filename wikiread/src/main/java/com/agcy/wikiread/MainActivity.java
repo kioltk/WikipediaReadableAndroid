@@ -3,7 +3,6 @@ package com.agcy.wikiread;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.ImageView;
 import com.agcy.wikiread.Core.Api.Api;
 import com.agcy.wikiread.Core.Helper;
 import com.agcy.wikiread.Core.Loader;
-import com.agcy.wikiread.Core.Parser;
+import com.agcy.wikiread.Core.Parsing.Url;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -83,9 +82,9 @@ public class MainActivity extends Activity{
                 String title =  ((Api) response).query.random.get(0).title;
                 String url = "";
                 if(!Helper.isTest())
-                    url = Parser.getApiUrl(title,lang);
+                    url = Url.getApiUrl(title, lang);
                 else
-                    url = "http://en.wikipedia.org/w/api.php?action=query&format=xml&prop=revisions|images|langlinks&rvprop=content&imlimit=500&lllimit=500&titles=Albert Einstein";
+                    url = "http://ru.wikipedia.org/w/api.php?action=query&format=xml&prop=revisions|images|langlinks&rvprop=content&imlimit=500&lllimit=500&titles=Альберт Эйнштейн";
                 intent.setData(Uri.parse(url));
             }
 
@@ -101,7 +100,7 @@ public class MainActivity extends Activity{
         };
 
 
-        task.execute(Parser.getRandomUrl(lang));
+        task.execute(Url.getRandomUrl(lang));
         fadeInTip.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

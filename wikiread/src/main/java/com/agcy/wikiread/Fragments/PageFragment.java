@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.agcy.wikiread.Core.ImageUrlFetcher;
-import com.agcy.wikiread.Core.Parser;
-import com.agcy.wikiread.Models.LangLink;
+import com.agcy.wikiread.Core.Pager;
 import com.agcy.wikiread.Models.Page;
 import com.agcy.wikiread.R;
 import com.agcy.wikiread.Views.LangSwitcherView;
@@ -26,8 +24,9 @@ import java.util.ArrayList;
 public class PageFragment extends Fragment {
     Page page;
     View rootView;
+    LangSwitcherView languagesView;
     Context context;
-    Parser parser;
+    Pager parser;
     public String lang;
     public ImageUrlFetcher imageUrlFetcher;
 
@@ -40,7 +39,7 @@ public class PageFragment extends Fragment {
         this.page = page;
         this.context = context;
         this.lang = lang;
-        parser = new Parser(page, lang);
+        parser = new Pager(page, lang);
     }
 
     @Override
@@ -58,7 +57,6 @@ public class PageFragment extends Fragment {
     }
 
     public void parseViews() {
-        parser.parseNodes();
         parser.parseViews(context);
     }
 
@@ -108,7 +106,8 @@ public class PageFragment extends Fragment {
     }
 
     public LangSwitcherView parseLangs() {
-        LangSwitcherView listView = new LangSwitcherView(context, page.langlinks, lang);
-        return listView;
+            if (languagesView == null)
+                languagesView = new LangSwitcherView(context, page.langlinks, lang);
+        return languagesView;
     }
 }

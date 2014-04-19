@@ -4,8 +4,10 @@ import android.content.Context;
 import android.text.Html;
 import android.text.Spannable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.agcy.wikiread.Core.Api.Api;
+import com.agcy.wikiread.Core.Parsing.Markup.Parser;
 import com.agcy.wikiread.Core.Parsing.Nodes.BlockquotedNode;
 import com.agcy.wikiread.Core.Parsing.Nodes.GroupNode;
 import com.agcy.wikiread.Core.Parsing.Nodes.ItemsListNode;
@@ -24,11 +26,11 @@ import java.util.ArrayList;
 /**
  * Created by kiolt_000 on 27.02.14.
  */
-public class Parser {
+public class Pager {
     // EXAMPLE: http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=xmlfm&titles=Albert%20Einstein
     // formating http://www.mediawiki.org/wiki/Help:Formatting
 
-    static String lang;
+    String lang;
     String content;
     Page page;
     public ArrayList<View> parsedViews;
@@ -36,12 +38,12 @@ public class Parser {
     Node currentNode;
     String nodeContent;
 
-    public Parser(Page page, String lang) {
+    public Pager(Page page, String lang) {
 
 
         this.page = page;
-        this.content = "\n" + page.revisions.get(0).content;
-        Parser.lang = lang;
+        this.content =  page.revisions.get(0).content;
+        this.lang = lang;
         parsedNodes = new ArrayList<Node>();
         parsedViews = new ArrayList<View>();
         currentNode = null;
@@ -50,9 +52,11 @@ public class Parser {
     }
 
     public void parseViews(Context context) {
+
+
+
+        parseNodes();
         ArrayList<View> views = new ArrayList<View>();
-
-
         for (Node node : parsedNodes) {
             View view = node.getView(context);
             views.add(view);
@@ -60,11 +64,14 @@ public class Parser {
         parsedViews = views;
     }
 
-    // the power is here
     public void parseNodes() {
+
+
+        if(content.toLowerCase().startsWith("#redirect")){
+            content = "The path does not exist. Maybe " + content.substring(9)+"?";
+        }
+
         while (!content.equals("")) {
-            // till last comes ( without last! )
-            //TODO: #REDIRECT [[ LINK ]] - LINK ERROR - MAYBE THIS?
             Character currentCharacter = content.charAt(0);
             Character nextChar;
 
@@ -103,6 +110,7 @@ public class Parser {
                             case ';':
                             case ':':
                             case '#':
+
                                 int listend = content.indexOf("\n\n");
                                 int listStart = 1;
 
@@ -138,8 +146,6 @@ public class Parser {
                                         content = content.substring(tagEnd + tag.length());
 
                                         saveNode();
-                                    } else {
-
                                     }
                                 }
                                 break;
@@ -192,7 +198,7 @@ public class Parser {
                             // is it error \n?
 
                             default:
-                                if (nodeContent != "") {
+                                if (!nodeContent.equals("")) {
                                     currentNode = getParagraph(nodeContent);
                                     content = "\n" + content;
                                 }
@@ -226,6 +232,19 @@ public class Parser {
 
                     }
                 */
+                case '{':
+
+                    // todo: catched {{some wiki info}}
+
+                    String correctedNodeTemp = NewParser.getCorrectedWikiTag(content.substring(0));
+                    int correctNodeEnd = correctedNodeTemp.length();
+
+                    if(Helper.isTest())
+                        nodeContent += "#unparsed wikinode#";
+
+                    content = " " + content.substring(correctNodeEnd);
+
+                    break;
                 default: {
                     nodeContent += Character.toString(currentCharacter);
                 }
@@ -255,6 +274,7 @@ public class Parser {
     }
 
 
+
     private void saveNode() {
 
         if (currentNode != null) {
@@ -269,14 +289,10 @@ public class Parser {
         if (nodeContent != null && !nodeContent.equals("") && !nodeContent.equals(" ") && !nodeContent.equals("\n")) {
             currentNode = getParagraph(nodeContent);
             saveNode();
-        } else {
-
         }
     }
 
     static Boolean checkPicture(String content) {
-
-
         if (content.contains(":")) {
 
             int endIndex = content.indexOf(":");
@@ -291,7 +307,7 @@ public class Parser {
         return "http://" + lang + ".wikipedia.org/wiki/";
     }
 
-    static ArrayList<Legend> parseWikiLegend(String content) {
+    ArrayList<Legend> parseWikiLegend(String content) {
         ArrayList<Legend> response = new ArrayList<Legend>();
         while (content.toLowerCase().contains("{{legend")) {
             int startIndex = content.toLowerCase().indexOf("{{legend"),
@@ -311,7 +327,7 @@ public class Parser {
         return response;
     }
 
-    static String parseWikiLinks(String content) {
+    String parseWikiLinks(String content) {
 
         while (content.contains("[[")) {
             String href = content.substring(content.indexOf("[[") + 2, content.indexOf("]]"));
@@ -341,7 +357,7 @@ public class Parser {
         return content;
     }
 
-    static String parseWikiTags(String content) {
+    String parseWikiTags(String content) {
 
         for (int i = 0; i < content.length(); i++) {
             Character character = content.charAt(i);
@@ -467,12 +483,12 @@ public class Parser {
         return content;
     }
 
-    static String getWikiLangLink(String content) {
+    String getWikiLangLink(String content) {
         return "";
         //return parseWikiLinks("[["+content+"|"+content+":]] ");todo: languages?
     }
 
-    static String parseBold(String content) {
+    String parseBold(String content) {
         while (content.contains("'''")) {
             content = content.replaceFirst("'''", "<b>");
             content = content.replaceFirst("'''", "</b>");
@@ -480,7 +496,7 @@ public class Parser {
         return content;
     }
 
-    static Boolean valueChecker(String value) {
+    Boolean valueChecker(String value) {
         try {
             Integer.parseInt(value);
         } catch (NumberFormatException e) {
@@ -492,7 +508,8 @@ public class Parser {
     //endregion
 
     //region nodeParsers
-    static PictureNode getPicture(String content) {
+
+    PictureNode getPicture(String content) {
         String description = "";
         content = parseWikiLinks(content);
         ArrayList<Legend> legend = parseWikiLegend(content);
@@ -506,7 +523,7 @@ public class Parser {
         return pictureNode;
     }
 
-    static ParagraphNode getParagraph(String content) {
+    ParagraphNode getParagraph(String content) {
 
 
 
@@ -523,7 +540,7 @@ public class Parser {
         return new ParagraphNode(content);
     }
 
-    static Node getWikiNode(String content) {
+     Node getWikiNode(String content) {
 
         if (content.contains("\n")) {
             if (Helper.isTest())
@@ -534,7 +551,7 @@ public class Parser {
         return new SimpleWikiNode(parseWikiTags(content));
     }
 
-    static TitleNode getTitle(String content) {
+    TitleNode getTitle(String content) {
         // == TITLE ==
 
         int level = (content.length() - content.replace("=", "").length()) / 2;
@@ -542,7 +559,7 @@ public class Parser {
         return new TitleNode(content, level - 2);// the biggest title has 0 level, but the biggest title of wikimarkup has 2
     }
 
-    static ItemsListNode getItemsList(String content) {
+    ItemsListNode getItemsList(String content) {
 
         String[] items = content.split("\\n");
         ArrayList<ListItemNode> nodes = new ArrayList<ListItemNode>();
@@ -609,27 +626,19 @@ public class Parser {
         return new ItemsListNode(nodes);
     }
 
-    static PreformattedNode getPreformatted(String content) {
+    PreformattedNode getPreformatted(String content) {
         //todo: preformat it -_-
         return new PreformattedNode(content);
     }
 
-    static BlockquotedNode getBlockquoted(String content) {
+    BlockquotedNode getBlockquoted(String content) {
         return new BlockquotedNode(content);
     }
 
-    static Node getDivider() {
+    Node getDivider() {
         return new Node();
     }
     //endregion
-
-    //region apiParser
-    static String apiUrl = ".wikipedia.org/w/api.php?action=query&format=xml" +
-            "&prop=revisions|images|langlinks" +
-            "&rvprop=content" +
-            "&imlimit=500" +
-            "&lllimit=500" +
-            "&titles=";
 
     public static Page getPage(Api apiResponse) {
         try {
@@ -640,45 +649,6 @@ public class Parser {
         }
     }
 
-    public static String parseUrl(String url) {
-        if(url.contains("wikipedia.org/w/api"))
-            return url;
-        String lang = parseLangFromUrl(url);
-        String pageTitle = parseTitleFromUrl(url);
-        return getApiUrl(pageTitle, lang);
-    }
-    public static String parseLangFromUrl(String url){
-        int langIndex = url.indexOf(".wikipedia.org");
-        return url.substring(7, langIndex);
-    }
-    public static String parseTitleFromUrl(String url){
-        int titleIndex = url.indexOf("/wiki/") + 5;
-        return url.substring(titleIndex + 1);
-    }
-    public static String getApiUrl(String title, String lang) {
 
-        String url = "http://" + lang + apiUrl + title;
-
-        return url;
-    }
-
-    public static String getSearchUrl(String searchQuery, String lang) {
-        String string = "http://" +
-                lang +
-                ".wikipedia.org/w/api.php?action=opensearch&limit=30&namespace=0&format=xml" +
-                "&search=" + searchQuery;
-        return string;
-    }
-
-    public static String getRandomUrl(String lang) {
-
-        String apiUrl =
-                "http://" +
-                        lang +
-                        ".wikipedia.org/w/api.php?action=query&rnnamespace=0&format=xml&list=random&rnlimit=1";
-
-        return apiUrl;
-    }
-    //endregion
 
 }

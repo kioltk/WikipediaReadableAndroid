@@ -15,6 +15,7 @@ import com.agcy.wikiread.Models.LangLink;
 import com.agcy.wikiread.R;
 import com.agcy.wikiread.Views.LangSwitcherView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,10 @@ public class LangSwitcherAdapter extends BaseAdapter {
     public LangSwitcherAdapter(Context context, List<LangLink> langs){
         super();
         this.context = context;
-        this.langs = langs;
+        if(langs!=null)
+            this.langs = langs;
+        else
+            this.langs = new ArrayList<LangLink>();
         this.title = null;
     }
     @Override

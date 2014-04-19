@@ -22,7 +22,7 @@ public class ParagraphNode extends Node {
     @Override
     public Spannable getValue() {
         Spannable sp = (Spannable) Html.fromHtml(value, null, new WikiTagHandler());
-        return (Spannable) Html.fromHtml(value);
+        return sp;
     }
 
     @Override

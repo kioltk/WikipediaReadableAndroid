@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -92,14 +93,14 @@ public class Drawer extends LinearLayout {
         setVisibility(VISIBLE);
 
         startAnimation(new AlphaAnimation(0,1));
-        getAnimation().setDuration(400);
+        getAnimation().setDuration(300);
 
         AnimationSet set = new AnimationSet(true);
         set.addAnimation(new TranslateAnimation((isLeft() ? -300 : 300),0,0,0));
         set.addAnimation(new AlphaAnimation(0,1));
         set.setStartOffset(100);
-        set.setInterpolator(new DecelerateInterpolator(0.8f));
-        set.setDuration(400);
+        set.setInterpolator(new AccelerateInterpolator(0.8f));
+        set.setDuration(300);
 
         content.startAnimation(set);
     }
@@ -107,13 +108,13 @@ public class Drawer extends LinearLayout {
         isOpened= false;
 
         startAnimation(new AlphaAnimation(1,0));
-        getAnimation().setDuration(400);
+        getAnimation().setDuration(300);
 
         AnimationSet set = new AnimationSet(true);
         set.addAnimation(new TranslateAnimation(0, (isLeft() ? -300 : 300), 0, 0));
         set.addAnimation(new AlphaAnimation(1, 0));
         set.setInterpolator(new DecelerateInterpolator(0.8f));
-        set.setDuration(400);
+        set.setDuration(300);
 
         content.startAnimation(set);
 
