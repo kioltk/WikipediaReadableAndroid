@@ -26,7 +26,9 @@ public abstract class ImageUrlFetcher extends AsyncTask<Void, Void, String> {
     //http://en.wikipedia.org/w/api.php?action=query&titles=#TITLES#&prop=imageinfo&iiprop=url|sha1
     public HashMap<String,PictureView> listeners;
     ArrayList<Image> images;
-    public ImageUrlFetcher(ArrayList<PictureView> listeners){
+    String lang;
+    public ImageUrlFetcher(ArrayList<PictureView> listeners, String lang){
+        this.lang = lang;
         this.listeners = new HashMap<String, PictureView>();
         this.images = new ArrayList<Image>();
         for(PictureView listener:listeners){
@@ -57,7 +59,7 @@ public abstract class ImageUrlFetcher extends AsyncTask<Void, Void, String> {
                 //todo: langs
                 //names = names.replace(".","%2E");
                 names = names.replace("&","%26");
-                String url = "http://en.wikipedia.org/w/api.php?action=query&format=xml&prop=imageinfo&iiprop=url&iilimit=500&titles=" + names;
+                String url = "http://"+lang+".wikipedia.org/w/api.php?action=query&format=xml&prop=imageinfo&iiprop=url&iilimit=500&titles=" + names;
                 url = url.replace(" ","%20");
                 url = url.replace("|","%7C");
                 DefaultHttpClient httpClient = new DefaultHttpClient();

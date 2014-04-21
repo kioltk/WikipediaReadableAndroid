@@ -292,12 +292,14 @@ public class Pager {
         }
     }
 
-    static Boolean checkPicture(String content) {
+    Boolean checkPicture(String content) {
         if (content.contains(":")) {
 
             int endIndex = content.indexOf(":");
             String fileCheckingTemp = content.substring(0, endIndex);
-            return fileCheckingTemp.equals("File") || fileCheckingTemp.equals("Image"); //todo: file: or файл:?
+            String image = Parser.Image.get(lang);
+            String file = Parser.File.get(lang);
+            return fileCheckingTemp.equals(file) || fileCheckingTemp.equals(image);
         }
         return false;
     }

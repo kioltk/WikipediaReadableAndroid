@@ -3,13 +3,14 @@
     package="com.agcy.wikiread" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="com.agcy.wikiread.WikiApplication">
         <activity
             android:name="com.agcy.wikiread.MainActivity"
             android:label="@string/app_name" >
@@ -19,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.agcy.wikiread.PageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

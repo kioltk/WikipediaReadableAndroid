@@ -18,9 +18,6 @@ import com.agcy.wikiread.Views.PictureView;
 
 import java.util.ArrayList;
 
-/**
- * Created by kiolt_000 on 10.03.14.
- */
 public class PageFragment extends Fragment {
     Page page;
     View rootView;
@@ -64,7 +61,7 @@ public class PageFragment extends Fragment {
 
         final ArrayList<PictureView> seekers = diveAndFindSeekers(parser.parsedViews);
 
-        imageUrlFetcher = new ImageUrlFetcher(seekers) {
+        imageUrlFetcher = new ImageUrlFetcher(seekers,lang) {
 
             @Override
             public void onFetched() {
@@ -106,8 +103,9 @@ public class PageFragment extends Fragment {
     }
 
     public LangSwitcherView parseLangs() {
-            if (languagesView == null)
-                languagesView = new LangSwitcherView(context, page.langlinks, lang);
+        if (languagesView == null) {
+            languagesView = new LangSwitcherView(context, page.langlinks, lang, true);
+        }
         return languagesView;
     }
 }

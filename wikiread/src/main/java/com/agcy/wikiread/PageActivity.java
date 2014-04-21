@@ -12,8 +12,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.agcy.wikiread.Adapters.LangSelectorAdapter;
+import com.agcy.wikiread.Adapters.LangSwitcherAdapter;
 import com.agcy.wikiread.Core.Api.Api;
 import com.agcy.wikiread.Core.Api.SearchItem;
 import com.agcy.wikiread.Core.Api.SearchSuggestion;
@@ -29,6 +32,8 @@ import com.agcy.wikiread.Models.Page;
 import com.agcy.wikiread.Views.Drawer;
 import com.agcy.wikiread.Views.DrawerMainMenu;
 import com.agcy.wikiread.Views.LangSwitcherView;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
 
 import java.util.ArrayList;
 
@@ -39,7 +44,7 @@ public class PageActivity extends Activity {
     Fragment tempFragment;
     Context context;
     Drawer drawer;
-    LangSwitcherView langSwitcherView;
+    View langSwitcherView;
     View drawerMenu;
     String lang;
 
@@ -80,7 +85,17 @@ public class PageActivity extends Activity {
 
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance().activityStart(this);  // Add this method.
 
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance().activityStop(this);  // Add this method.
+    }
     public void setContent(String title, String lang) {
         this.lang = lang;
         setContent(Url.getApiUrl(title, lang));
@@ -97,7 +112,7 @@ public class PageActivity extends Activity {
             @Override
             public void onError(Exception exp) {
                 if(Helper.isTest())
-                    updateStatus(exp.getLocalizedMessage()+ "\n "+url, false);
+                    updateStatus(exp.getLocalizedMessage()+ "\n " + url, false);
                 else
                     updateStatus("Error has occurred", false);
             }
@@ -137,17 +152,17 @@ public class PageActivity extends Activity {
                 try {
                     page = Pager.getPage(response);
                     tempFragment = new PageFragment(page, context, lang);
-                    langSwitcherView = ((PageFragment)tempFragment).parseLangs();
-                    langSwitcherView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    LangSwitcherView langSwitcherViewTemp = ((PageFragment) tempFragment).parseLangs();
+                    langSwitcherViewTemp.setOnClickListener(new LangSwitcherAdapter.OnClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            LangLink langLink = (LangLink) parent.getItemAtPosition(position);
+                        public void onClick(Object object) {
+                            LangLink langLink = (LangLink) object;
                             languageChanged(langLink.lang, langLink.title);
                             drawer.close();
                         }
                     });
+                    langSwitcherView = langSwitcherViewTemp;
                     ((PageFragment) tempFragment).parseViews();
-                    //todo: async parse
                     ((PageFragment) tempFragment).fetchImagesUrls();
 
                 } catch (Exception exp) {
@@ -185,12 +200,7 @@ public class PageActivity extends Activity {
                 drawer.setSide(Drawer.SIDE_RIGHT);
                 drawer.open();
             }
-        /*
-            todo: change languages
-            LangLink langLink = page.langlinks.get(1);
-            String url = Pager.parseUrl(langLink.title, langLink.lang);
-            setContent(url);
-        */
+
     }
     public void languageChanged(String lang, String title){
         this.lang = lang;
@@ -238,15 +248,18 @@ public class PageActivity extends Activity {
                 ArrayList<SearchItem> items = new ArrayList<SearchItem>(((SearchSuggestion) response).searchItemList);
                 tempFragment = new SearchFragment(items, context);
 
-                langSwitcherView = new LangSwitcherView(context);
-                langSwitcherView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                ListView langSwitcherViewTemp = new ListView(context);
+                langSwitcherViewTemp.setAdapter(new LangSelectorAdapter(context));
+                langSwitcherViewTemp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                         lang = ((LangLink) parent.getItemAtPosition(position)).lang;
                         search(searchRequest);
+                        drawer.close();
                     }
                 });
+                langSwitcherView = langSwitcherViewTemp;
                 ((LoaderFragment) currentFragment).onLoaded(true);
             }
 

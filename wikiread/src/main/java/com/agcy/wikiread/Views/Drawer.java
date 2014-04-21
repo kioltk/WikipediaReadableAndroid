@@ -13,6 +13,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.agcy.wikiread.R;
 
@@ -24,10 +25,22 @@ public class Drawer extends LinearLayout {
     public static final int SIDE_LEFT = 0;
     protected int side = 0;
     protected View paddingView;
+    protected LinearLayout contentContainer;
     protected View content;
     protected boolean isOpened = false;
+    protected boolean isProcessing = false;
     public Drawer(Context context, AttributeSet attributeSet){
         super(context,attributeSet);
+
+        contentContainer = new LinearLayout(context);
+        contentContainer.setOrientation(VERTICAL);
+        contentContainer.setBackgroundColor(0xFFFFFFFF);
+        contentContainer.setLayoutParams(new LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 7f ));
+
+        paddingView = new View(getContext());
+        paddingView.setLayoutParams(new LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,3f));
+
+        //todo: define width to tablets
 
         setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setVisibility(GONE);
@@ -36,17 +49,12 @@ public class Drawer extends LinearLayout {
         if(!isInEditMode()) {
             addNonEditModeSettings();
         }
-        paddingView = new View(getContext());
-        paddingView.setLayoutParams(new LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,3f));
-        //todo: define width to tablets
 
         setContent(new View(context));
-        content.setBackgroundColor(0xFFFFFFFF);
-
 
 
     }
-    public void addNonEditModeSettings(){
+    private void addNonEditModeSettings(){
 
         setOnClickListener(new OnClickListener() {
             @Override
@@ -59,9 +67,8 @@ public class Drawer extends LinearLayout {
     public void setContent(View content) {
 
         this.content = content;
-        content.setBackgroundColor(0xFFFFFFFF);
-        content.setLayoutParams(new LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 7f ));
-
+        contentContainer.removeAllViews();
+        contentContainer.addView(content);
     }
     public void setSide(int side){
 
@@ -79,46 +86,33 @@ public class Drawer extends LinearLayout {
 
     public void open() {
 
+        if(isOpened)
+            return;
+        isProcessing = true;
+
         removeAllViewsInLayout();
 
         if(isLeft()) {
-            addView(content);
+            addView(contentContainer);
             addView(paddingView);
         }else {
             addView(paddingView);
-            addView(content);
+            addView(contentContainer);
         }
 
-        isOpened = true;
         setVisibility(VISIBLE);
 
         startAnimation(new AlphaAnimation(0,1));
-        getAnimation().setDuration(300);
+        getAnimation().setDuration(200);
 
         AnimationSet set = new AnimationSet(true);
         set.addAnimation(new TranslateAnimation((isLeft() ? -300 : 300),0,0,0));
         set.addAnimation(new AlphaAnimation(0,1));
         set.setStartOffset(100);
         set.setInterpolator(new AccelerateInterpolator(0.8f));
-        set.setDuration(300);
+        set.setDuration(200);
 
-        content.startAnimation(set);
-    }
-    public void close() {
-        isOpened= false;
-
-        startAnimation(new AlphaAnimation(1,0));
-        getAnimation().setDuration(300);
-
-        AnimationSet set = new AnimationSet(true);
-        set.addAnimation(new TranslateAnimation(0, (isLeft() ? -300 : 300), 0, 0));
-        set.addAnimation(new AlphaAnimation(1, 0));
-        set.setInterpolator(new DecelerateInterpolator(0.8f));
-        set.setDuration(300);
-
-        content.startAnimation(set);
-
-        getAnimation().setAnimationListener(new Animation.AnimationListener() {
+        set.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -126,7 +120,44 @@ public class Drawer extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                isProcessing = false;
+                isOpened = true;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        contentContainer.startAnimation(set);
+    }
+    public void close() {
+        if(!isOpened)
+            return;
+        isProcessing = true;
+        startAnimation(new AlphaAnimation(1,0));
+        getAnimation().setDuration(200);
+
+        AnimationSet set = new AnimationSet(true);
+        set.addAnimation(new TranslateAnimation(0, (isLeft() ? -300 : 300), 0, 0));
+        set.addAnimation(new AlphaAnimation(1, 0));
+        set.setInterpolator(new DecelerateInterpolator(0.8f));
+        set.setDuration(200);
+
+        contentContainer.startAnimation(set);
+
+        getAnimation().setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
                 setVisibility(GONE);
+
+                isProcessing = false;
+                isOpened= false;
             }
 
             @Override

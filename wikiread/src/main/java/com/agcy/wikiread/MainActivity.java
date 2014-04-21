@@ -11,11 +11,14 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.agcy.wikiread.Core.Api.Api;
 import com.agcy.wikiread.Core.Helper;
 import com.agcy.wikiread.Core.Loader;
 import com.agcy.wikiread.Core.Parsing.Url;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -37,7 +40,7 @@ public class MainActivity extends Activity{
 
 
         final ImageView logoView = (ImageView) findViewById(R.id.logo);
-        final View tipView = findViewById(R.id.tip);
+        final TextView tipView = (TextView) findViewById(R.id.tip);
 
 
         final Animation fadeInLogo = new AlphaAnimation(0, 1);
@@ -51,8 +54,23 @@ public class MainActivity extends Activity{
         fadeInTip.setDuration(250);
 
         logoView.setAnimation(fadeInLogo);
-        tipView.setAnimation(fadeInTip);
 
+        fadeInTip.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                tipView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         fadeInLogo.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -70,7 +88,6 @@ public class MainActivity extends Activity{
             }
         });
 
-        final Intent intent = new Intent(context, PageActivity.class);
 
         final String lang = Locale.getDefault().getLanguage();
         Loader task = new Loader(Loader.PAGE) {
@@ -85,11 +102,24 @@ public class MainActivity extends Activity{
                     url = Url.getApiUrl(title, lang);
                 else
                     url = "http://ru.wikipedia.org/w/api.php?action=query&format=xml&prop=revisions|images|langlinks&rvprop=content&imlimit=500&lllimit=500&titles=Альберт Эйнштейн";
+
+                final Intent intent = new Intent(context, PageActivity.class);
+                findViewById(R.id.main).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(intent);
+                        finish();
+                    }
+                });
                 intent.setData(Uri.parse(url));
+                tipView.setAnimation(fadeInTip);
             }
 
             @Override
             public void onError(Exception exp) {
+
+                tipView.setText("Check your internet connection");
+                tipView.setAnimation(fadeInTip);
             }
 
             @Override
@@ -106,13 +136,6 @@ public class MainActivity extends Activity{
             public void onAnimationStart(Animation animation) {
 
                 tipView.setVisibility(View.VISIBLE);
-                findViewById(R.id.main).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(intent);
-                        finish();
-                    }
-                });
             }
 
             @Override
@@ -129,5 +152,14 @@ public class MainActivity extends Activity{
         // первый поиск http://ru.wikipedia.org/wiki/Special:Search?search=ГОРИЛЛЫ&go=Go
         // http://www.wikipedia.org/search-redirect.php?family=wikipedia&search=ГОРИЛЛЫ&language=ru&go=++→++&go=Go
     }
-
+    public void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this);
+        EasyTracker.getInstance().activityStart(this);  // Add this method.
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance().activityStop(this);  // Add this method.
+    }
 }

@@ -14,5 +14,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_main_activity2">MainActivity2</string>
     <string name="hello_world">Hello world!</string>
+    <string name="Hello">Hello!\nIt\'s test version of application.\nIt can crash or display incorrectly.\nHowever thank you for buying it.\nWe do our best to create something beautiful.\nClick to continue.</string>
 
 </resources>

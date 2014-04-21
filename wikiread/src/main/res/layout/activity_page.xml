@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     android:focusable="true"
+    android:clipToPadding="false"
     android:focusableInTouchMode="true"
     tools:context="com.agcy.wikiread.PageActivity">
 
     <RelativeLayout
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -18,7 +17,9 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-            <include layout="@layout/action_bar" />
+            <include
+
+                layout="@layout/action_bar" />
     </RelativeLayout>
 
 

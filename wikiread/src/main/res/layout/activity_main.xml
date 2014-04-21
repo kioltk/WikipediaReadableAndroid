@@ -5,6 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
     tools:context="com.agcy.wikiread.MainActivity">
 
     <ImageView
@@ -17,9 +19,9 @@
         android:typeface="serif" />
     <TextView
         android:id="@+id/tip"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:gravity="center"
-        android:text="Hello!\nIt's test version of application.\nIt can crash or display incorrectly.\nHowever thank you for buying it.\nWe do our best to create something beautiful.\nClick to continue."
+        android:text="@string/Hello"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/logo"
         android:layout_width="wrap_content"
